@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test sounds</title>
+  <script src="../jsgame0.js"></script>
+  <script src="test.js"></script>
+  <script src="bunny.js"></script>
+  <script id="world" type="application/json">
+{
+  "inventory": {},
+  "page1": {
+    "beep": {
+      "x": 50,
+      "y": 0,
+      "width": 30,
+      "height": 30,
+      "script": "on click beep;"
+    },
+    "beepText": {
+      "x": 100,
+      "y": 0,
+      "width": 100,
+      "height": 30,
+      "text": "beep"
+    },
+    "carrotcarrotcarrot": {
+      "x": 50,
+      "y": 40,
+      "width": 30,
+      "height": 30,
+      "script": "on click play carrotcarrotcarrot;"
+    },
+    "carrotText": {
+      "x": 100,
+      "y": 40,
+      "width": 100,
+      "height": 30,
+      "text": "carrot"
+    },
+    "evillaugh": {
+      "x": 50,
+      "y": 80,
+      "width": 30,
+      "height": 30,
+      "script": "on click play evillaugh;"
+    },
+    "evillaughText": {
+      "x": 100,
+      "y": 80,
+      "width": 100,
+      "height": 30,
+      "text": "evillaugh"
+    },
+    "fire": {
+      "x": 50,
+      "y": 120,
+      "width": 30,
+      "height": 30,
+      "script": "on click play fire;"
+    },
+    "fireText": {
+      "x": 100,
+      "y": 120,
+      "width": 100,
+      "height": 30,
+      "text": "fire"
+    },
+    "horray": {
+      "x": 50,
+      "y": 160,
+      "width": 30,
+      "height": 30,
+      "script": "on click play horray;"
+    },
+    "horrayText": {
+      "x": 100,
+      "y": 160,
+      "width": 100,
+      "height": 30,
+      "text": "horray"
+    },
+    "munch": {
+      "x": 50,
+      "y": 200,
+      "width": 30,
+      "height": 30,
+      "script": "on click play munch;"
+    },
+    "munchText": {
+      "x": 100,
+      "y": 200,
+      "width": 100,
+      "height": 30,
+      "text": "munch"
+    },
+    "munching": {
+      "x": 50,
+      "y": 240,
+      "width": 30,
+      "height": 30,
+      "script": "on click play munching;"
+    },
+    "munchingText": {
+      "x": 100,
+      "y": 240,
+      "width": 100,
+      "height": 30,
+      "text": "munching"
+    },
+    "woof": {
+      "x": 50,
+      "y": 280,
+      "width": 30,
+      "height": 30,
+      "script": "on click play woof;"
+    },
+    "woofText": {
+      "x": 100,
+      "y": 280,
+      "width": 100,
+      "height": 30,
+      "text": "woof"
+    }
+  }
+}
+  </script>
+  <style type="text/css" media="screen">
+body {
+  background-color: white;
+  color: black;
+}
+.hidden {
+  display: none;
+}
+#original {
+  margin-left: 1em;
+}
+  </style>
+</head>
+
+<body>
+<section id="soundLoader" class="hidden">
+  <audio class="hidden" controls preload="auto" src="sounds/carrotcarrotcarrot.wav" data-name="carrotcarrotcarrot">Your browser does not support the audio element.</audio>
+  <audio class="hidden" controls preload="auto" src="sounds/evillaugh.wav" data-name="evillaugh">Your browser does not support the audio element.</audio>
+  <audio class="hidden" controls preload="auto" src="sounds/fire.wav" data-name="fire">Your browser does not support the audio element.</audio>
+  <audio class="hidden" controls preload="auto" src="sounds/horray.wav" data-name="horray">Your browser does not support the audio element.</audio>
+  <audio class="hidden" controls preload="auto" src="sounds/munch.wav" data-name="munch">Your browser does not support the audio element.</audio>
+  <audio class="hidden" controls preload="auto" src="sounds/munching.wav" data-name="munching">Your browser does not support the audio element.</audio>
+  <audio class="hidden" controls preload="auto" src="sounds/woof.wav" data-name="woof">Your browser does not support the audio element.</audio>
+</section>
+
+<main>
+<h1>Test sounds</h1>
+
+<canvas id="screen">
+The game screen appears here if your browser supports the Canvas API.
+</canvas>
+<section id="controls">
+  <button type="button" id="reset">Reset</button>
+  <button type="button" id="pause">Pause</button>
+</section>
+
+</main>
+
+<script>
+WIDTH = 640;
+HEIGHT = 480;
+
+function test_constants() {
+  test.assertEqual(START, 'page1');
+  test.assertEqual(INVENTORY, 'inventory');
+  test.assertEqual(INVENTORY_TOP, 320);
+  test.assertEqual(CLAUSE_SEPARATOR, ';');
+  test.assertEqual(Shape.MAP.size, 0);
+}
+
+function test_parseScript() {
+  test.assertRaises(TypeError, Shape.parseScript, 42);
+  for (let value of [
+    '',
+    'foobar',
+    ' foobar',
+    'foobar ',
+    ' foobar ',
+    'on foobar',
+    ' on foobar',
+    'on foobar ',
+    ' on foobar ',
+    'on foobar beep',
+    ' on foobar beep',
+    'on foobar beep ',
+    ' on foobar beep ']) {
+    test.assertEqual(Shape.parseScript(value), []);
+    test.assertEqual(Shape.parseScript(value.toLowerCase()), []);
+    test.assertEqual(Shape.parseScript(value.toUpperCase()), []);
+  }
+  for (let value of [
+    'on click beep',
+    ' on click beep',
+    'on click beep ',
+    ' on click beep ',
+    '  on click beep  ']) {
+    test.assertEqual(Shape.parseScript(value), ['on click beep']);
+    test.assertEqual(Shape.parseScript(value.replace('click', 'enter')), ['on enter beep']);
+    // This is not a valid shape script trigger but works for testing
+    test.assertEqual(Shape.parseScript(value.replace('click', 'drop')), ['on drop beep']);
+  }
+  for (let value of [
+    'on click play woof',
+    ' on click play woof',
+    'on click play woof ',
+    ' on click play woof ',
+    '  on click play woof  ']) {
+    test.assertEqual(Shape.parseScript(value), ['on click play woof']);
+    test.assertEqual(Shape.parseScript(value.replace('click', 'enter')), ['on enter play woof']);
+    // This is not a valid shape script trigger but works for testing
+    test.assertEqual(Shape.parseScript(value.replace('click', 'drop')), ['on drop play woof']);
+  }
+  test.assertEqual(Shape.parseScript('on click beep; on enter play woof; on foobar beep'),
+                   ['on click beep', 'on enter play woof']);
+
+  test.assertEqual(Shape.parseScript('on click play boing goto home-page;'),
+                   ['on click play boing goto home-page']);
+  test.assertEqual(Shape.parseScript('on drop carrot hide carrot play munching;'),
+                   ['on drop carrot hide carrot play munching']);
+  test.assertEqual(Shape.parseScript('on click play boing goto home-page; on drop carrot hide carrot play munching;'),
+                   ['on click play boing goto home-page', 'on drop carrot hide carrot play munching']);
+}
+
+function test_runAction() {
+  test.assertRaises(TypeError, Shape.runAction, 42);
+  test.assertRaises(RangeError, Shape.runAction, 'foobar');
+  test.assertRaises(RangeError, Shape.runAction, 'foo bar');
+  test.assertRaises(RangeError, Shape.runAction, 'foo bar baz');
+  test.assertRaises(RangeError, Shape.runAction, 'beep foobar');
+  Shape.runAction('play foobar');
+
+  Shape.MAP = new Map();
+  let shape = new Shape('foobar', 2, 3, 4, 5);
+  test.assertFalse(shape.hidden);
+  Shape.runAction('hide foobar');
+  test.assertTrue(shape.hidden);
+  Shape.runAction('hide foobar');
+  test.assertTrue(shape.hidden);
+  Shape.runAction('show foobar');
+  test.assertFalse(shape.hidden);
+  Shape.runAction('show foobar');
+  test.assertFalse(shape.hidden);
+  Shape.runAction('hide foobar');
+  test.assertTrue(shape.hidden);
+}
+
+function test_shape() {
+  Shape.MAP = new Map();
+  test.assertEqual(Shape.MAP.size, 0);
+  let shape = new Shape('foobar', 2, 3, 4, 5);
+  test.assertEqual(shape.name, 'foobar');
+  test.assertEqual(shape.x, 2);
+  test.assertEqual(shape.y, 3);
+  test.assertEqual(shape.width, 4);
+  test.assertEqual(shape.height, 5);
+  test.assertEqual(shape.text, '');
+  test.assertEqual(shape.image, '');
+  test.assertFalse(shape.hidden);
+  test.assertFalse(shape.movable);
+  test.assertEqual(shape.location, '');
+  test.assertEqual(shape.clauses, []);
+  test.assertFalse(shape.inInventory);
+  shape.location = INVENTORY;
+  test.assertTrue(shape.inInventory);
+  shape.location = 'foobar';
+  test.assertFalse(shape.inInventory);
+  shape.location = '';
+  test.assertFalse(shape.inInventory);
+  test.assertFalse(shape.hasDrop('foobar'));
+
+  test.assertEqual(Shape.MAP.size, 1);
+  test.assertTrue(Shape.MAP.has(shape.name));
+}
+
+function test_fireClick() {
+  Shape.MAP = new Map();
+  let shape = new Shape('foobar', 2, 3, 4, 5);
+  shape.clauses = ['on click hide foobar'];
+  test.assertFalse(shape.hidden);
+  shape.fireClick();
+  test.assertTrue(shape.hidden);
+  shape.fireClick();
+  test.assertTrue(shape.hidden);
+  shape.hidden = false;
+  shape.fireClick();
+  test.assertTrue(shape.hidden);
+}
+
+function test_fireEnter() {
+  Shape.MAP = new Map();
+  let shape = new Shape('foobar', 2, 3, 4, 5);
+  shape.hidden = true;
+  shape.clauses = ['on enter show foobar'];
+  test.assertTrue(shape.hidden);
+  shape.fireEnter();
+  test.assertFalse(shape.hidden);
+  shape.fireEnter();
+  test.assertFalse(shape.hidden);
+  shape.hidden = true;
+  shape.fireEnter();
+  test.assertFalse(shape.hidden);
+}
+
+function test_drop() {
+  Shape.MAP = new Map();
+  let foo = new Shape('foo', 2, 3, 4, 5),
+      bar = new Shape('bar', 12, 13, 14, 15);
+  foo.clauses = ['on drop bar hide bar'];
+  test.assertFalse(foo.hidden);
+  test.assertFalse(bar.hidden);
+
+  test.assertTrue(foo.hasDrop('bar'));
+  test.assertFalse(foo.hasDrop('baz'));
+  test.assertFalse(bar.hasDrop('foo'));
+  test.assertFalse(bar.hasDrop('baz'));
+
+  foo.fireDrop('baz');
+  test.assertFalse(foo.hidden);
+  test.assertFalse(bar.hidden);
+  bar.fireDrop('baz');
+  test.assertFalse(foo.hidden);
+  test.assertFalse(bar.hidden);
+  foo.fireDrop('bar');
+  test.assertFalse(foo.hidden);
+  test.assertTrue(bar.hidden);
+}
+
+function test_loadWorld() {
+  test.assertRaises(TypeError, loadWorld, '');
+  test.assertEqual(loadWorld({}).size, 0);
+  test.assertTrue(loadWorld({inventory: {}}).has(INVENTORY));
+  test.assertTrue(loadWorld({foobar: {}}).has('foobar'));
+
+  let world = loadWorld({page1: {foobar: {x: 1, y: 2, width: 3, height: 4}}}),
+      shape = world.get(START)[0];
+  test.assertEqual(world.size, 1);
+  test.assertTrue(world.has(START));
+  test.assertEqual(shape.name, 'foobar');
+  test.assertEqual(shape.x, 1);
+  test.assertEqual(shape.y, 2);
+  test.assertEqual(shape.width, 3);
+  test.assertEqual(shape.height, 4);
+  test.assertEqual(shape.text, '');
+  test.assertEqual(shape.image, '');
+  test.assertFalse(shape.hidden);
+  test.assertFalse(shape.movable);
+  test.assertEqual(shape.location, START);
+  test.assertEqual(shape.clauses, []);
+  test.assertFalse(shape.inInventory);
+
+  world = loadWorld({page1: {barbaz: {x: 11, y: 12, width: 13, height: 14, hidden: true, text: 'baz'}}});
+  shape = world.get(START)[0];
+  test.assertEqual(world.size, 1);
+  test.assertTrue(world.has(START));
+  test.assertEqual(shape.name, 'barbaz');
+  test.assertEqual(shape.x, 11);
+  test.assertEqual(shape.y, 12);
+  test.assertEqual(shape.width, 13);
+  test.assertEqual(shape.height, 14);
+  test.assertEqual(shape.text, 'baz');
+  test.assertEqual(shape.image, '');
+  test.assertTrue(shape.hidden);
+  test.assertFalse(shape.movable);
+  test.assertEqual(shape.location, START);
+  test.assertEqual(shape.clauses, []);
+  test.assertFalse(shape.inInventory);
+
+  world = loadWorld({page1: {foobaz: {x: 10, y: 20, width: 30, height: 40, movable: false, image: 'baz'}}});
+  shape = world.get(START)[0];
+  test.assertEqual(world.size, 1);
+  test.assertTrue(world.has(START));
+  test.assertEqual(shape.name, 'foobaz');
+  test.assertEqual(shape.x, 10);
+  test.assertEqual(shape.y, 20);
+  test.assertEqual(shape.width, 30);
+  test.assertEqual(shape.height, 40);
+  test.assertEqual(shape.text, '');
+  test.assertEqual(shape.image, 'baz');
+  test.assertFalse(shape.hidden);
+  // This is not a mistake: movable is true if it is present
+  test.assertTrue(shape.movable);
+  test.assertEqual(shape.location, START);
+  test.assertEqual(shape.clauses, []);
+  test.assertFalse(shape.inInventory);
+}
+
+window.addEventListener('load', (event) => {
+  test.main();
+  sounds.LOAD('#soundLoader audio');
+  reset();
+  screen.set_mode('#screen', '#reset', '#pause');
+});
+</script>
+</body>
+
+</html>
