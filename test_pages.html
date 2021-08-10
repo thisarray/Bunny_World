@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test pages</title>
+  <script src="../jsgame0.js"></script>
+  <script src="test.js"></script>
+  <script src="bunny.js"></script>
+  <script id="world" type="application/json">
+{
+  "inventory": {},
+  "page1": {
+    "page1Title": {
+      "x": 270,
+      "y": 50,
+      "width": 100,
+      "height": 50,
+      "text": "page1"
+    },
+    "page1Next": {
+      "x": 600,
+      "y": 110,
+      "width": 25,
+      "height": 100,
+      "script": "on click goto page2;"
+    }
+  },
+  "page2": {
+    "page2Title": {
+      "x": 270,
+      "y": 50,
+      "width": 100,
+      "height": 50,
+      "text": "page2"
+    },
+    "page2Previous": {
+      "x": 15,
+      "y": 110,
+      "width": 25,
+      "height": 100,
+      "script": "on click goto page1;"
+    },
+    "page2Next": {
+      "x": 600,
+      "y": 110,
+      "width": 25,
+      "height": 100,
+      "script": "on click goto page3;"
+    }
+  },
+  "page3": {
+    "page3Title": {
+      "x": 270,
+      "y": 50,
+      "width": 100,
+      "height": 50,
+      "text": "page3"
+    },
+    "page3Previous": {
+      "x": 15,
+      "y": 110,
+      "width": 25,
+      "height": 100,
+      "script": "on click goto page2;"
+    }
+  }
+}
+  </script>
+  <style type="text/css" media="screen">
+body {
+  background-color: white;
+  color: black;
+}
+.hidden {
+  display: none;
+}
+#original {
+  margin-left: 1em;
+}
+  </style>
+</head>
+
+<body>
+
+<main>
+<h1>Test pages</h1>
+
+<canvas id="screen">
+The game screen appears here if your browser supports the Canvas API.
+</canvas>
+<section id="controls">
+  <button type="button" id="reset">Reset</button>
+  <button type="button" id="pause">Pause</button>
+</section>
+
+</main>
+
+<script>
+WIDTH = 640;
+HEIGHT = 480;
+
+function test_loadWorld() {
+  test.assertEqual(world.size, 4);
+  test.assertTrue(world.has(INVENTORY));
+  test.assertEqual(world.get(INVENTORY), []);
+  test.assertTrue(world.has(START));
+  test.assertEqual(world.get(START).length, 2);
+  test.assertTrue(world.has('page2'));
+  test.assertEqual(world.get('page2').length, 3);
+  test.assertTrue(world.has('page3'));
+  test.assertEqual(world.get('page3').length, 2);
+}
+
+function test_goto() {
+  test.assertEqual(currentPage, START);
+  test.assertIs(dragged, null);
+
+  test.assertRaises(TypeError, goto, 42);
+  for (let value of [
+    '',
+    'foobar']) {
+    goto(value);
+    test.assertEqual(currentPage, START);
+  }
+  for (let value of [
+    'page3',
+    'page2',
+    START]) {
+    goto(value);
+    test.assertEqual(currentPage, value);
+  }
+}
+
+window.addEventListener('load', (event) => {
+  reset();
+  screen.set_mode('#screen', '#reset', '#pause');
+  test.main();
+});
+</script>
+</body>
+
+</html>
