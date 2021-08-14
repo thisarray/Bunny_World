@@ -113,6 +113,39 @@ function test_loadWorld() {
   test.assertEqual(world.get('page3').length, 2);
 }
 
+function test_removeShapeFromPage() {
+  test.assertRaises(TypeError, removeShapeFromPage, 'foobar', START);
+  test.assertRaises(TypeError, removeShapeFromPage, 42, START);
+
+  for (let shape of world.get('page2')) {
+    test.assertRaises(TypeError, removeShapeFromPage, shape, 42);
+    for (let value of ['foobar', START, INVENTORY, 'page3']) {
+      removeShapeFromPage(shape, value);
+      test.assertEqual(world.get(START).length, 2);
+      test.assertEqual(world.get('page2').length, 3);
+      test.assertEqual(world.get('page3').length, 2);
+    }
+  }
+  removeShapeFromPage(world.get(START)[1], START);
+  test.assertEqual(world.get(START).length, 1);
+  test.assertEqual(world.get('page2').length, 3);
+  test.assertEqual(world.get('page3').length, 2);
+
+  for (let shape of world.get('page3')) {
+    for (let value of ['foobar', START, INVENTORY, 'page2']) {
+      removeShapeFromPage(shape, value);
+      test.assertEqual(world.get(START).length, 1);
+      test.assertEqual(world.get('page2').length, 3);
+      test.assertEqual(world.get('page3').length, 2);
+    }
+  }
+  removeShapeFromPage(world.get(START)[0], START);
+  test.assertEqual(world.get(START).length, 0);
+  test.assertEqual(world.get('page2').length, 3);
+  test.assertEqual(world.get('page3').length, 2);
+  reset();
+}
+
 function test_goto() {
   test.assertEqual(currentPage, START);
   test.assertIs(dragged, null);

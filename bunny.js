@@ -311,6 +311,16 @@ function goto(name) {
 }
 
 function removeShapeFromPage(shape, page) {
+  if (!(shape instanceof Shape)) {
+    throw new TypeError('shape must be a Shape object.');
+  }
+  if (typeof page !== 'string') {
+    throw new TypeError('page must be a non-empty string.');
+  }
+  if (!world.has(page)) {
+    return;
+  }
+
   let shapes = world.get(page);
   for (let i = shapes.length - 1; i > -1; i--) {
     if (shapes[i].name === shape.name) {
