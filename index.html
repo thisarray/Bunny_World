@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bunny World</title>
+  <script src="../jsgame0.js"></script>
+  <script src="bunny.js"></script>
+  <script id="world" type="application/json">
+{
+  "inventory": {},
+  "page1": {
+    "title": {
+      "x": 160,
+      "y": 10,
+      "width": 320,
+      "height": 50,
+      "text": "Bunny World!"
+    },
+    "page1Text1": {
+      "x": 400,
+      "y": 100,
+      "width": 170,
+      "height": 30,
+      "text": "You are in a maze"
+    },
+    "page1Text2": {
+      "x": 400,
+      "y": 140,
+      "width": 160,
+      "height": 30,
+      "text": "of twisty little"
+    },
+    "page1Text3": {
+      "x": 400,
+      "y": 180,
+      "width": 190,
+      "height": 30,
+      "text": "passages, all alike"
+    },
+    "mysticDoor": {
+      "x": 220,
+      "y": 240,
+      "width": 40,
+      "height": 40,
+      "script": "on click goto mystic;"
+    },
+    "door2": {
+      "x": 300,
+      "y": 240,
+      "width": 40,
+      "height": 40,
+      "hidden": true,
+      "script": "on click goto fireroom;"
+    },
+    "deathDoor": {
+      "x": 380,
+      "y": 240,
+      "width": 40,
+      "height": 40,
+      "script": "on click goto death;"
+    }
+  },
+  "mystic": {
+    "mysticBunny": {
+      "x": 244,
+      "y": 20,
+      "width": 153,
+      "height": 189,
+      "image": "mystic",
+      "script": "on click hide carrot play munch play munching play carrotcarrotcarrot; on enter show door2;"
+    },
+    "mysticExit": {
+      "x": 20,
+      "y": 200,
+      "width": 40,
+      "height": 40,
+      "script": "on click goto page1;"
+    },
+    "mysticText": {
+      "x": 80,
+      "y": 200,
+      "width": 130,
+      "height": 30,
+      "text": "Mystic Bunny-"
+    },
+    "rub": {
+      "x": 80,
+      "y": 240,
+      "width": 174,
+      "height": 43,
+      "image": "rubmytummy"
+    }
+  },
+  "fireroom": {
+    "fire": {
+      "x": 40,
+      "y": 20,
+      "width": 293,
+      "height": 239,
+      "image": "fire",
+      "script": "on enter play fire;"
+    },
+    "carrot": {
+      "x": 480,
+      "y": 200,
+      "width": 84,
+      "height": 100,
+      "image": "carrot",
+      "movable": true
+    },
+    "fireText1": {
+      "x": 20,
+      "y": 260,
+      "width": 150,
+      "height": 30,
+      "text": "Eek! Fire-Room."
+    },
+    "fireText2": {
+      "x": 20,
+      "y": 290,
+      "width": 90,
+      "height": 30,
+      "text": "Run away!"
+    },
+    "fireExit": {
+      "x": 300,
+      "y": 260,
+      "width": 40,
+      "height": 40,
+      "script": "on click goto mystic;"
+    }
+  },
+  "death": {
+    "deathBunny": {
+      "x": 194,
+      "y": 0,
+      "width": 252,
+      "height": 270,
+      "image": "death",
+      "script": "on enter play evillaugh; on drop carrot hide carrot play munching hide deathBunny show exit; on click play evillaugh;"
+    },
+    "deathText1": {
+      "x": 20,
+      "y": 260,
+      "width": 200,
+      "height": 30,
+      "text": "You must appease the"
+    },
+    "deathText2": {
+      "x": 20,
+      "y": 290,
+      "width": 150,
+      "height": 30,
+      "text": "Bunny of Death!"
+    },
+    "exit": {
+      "x": 480,
+      "y": 200,
+      "width": 40,
+      "height": 40,
+      "hidden": true,
+      "script": "on click goto victory;"
+    }
+  },
+  "victory": {
+    "carrot1": {
+      "x": 118,
+      "y": 50,
+      "width": 84,
+      "height": 100,
+      "image": "carrot"
+    },
+    "carrot2": {
+      "x": 257,
+      "y": 100,
+      "width": 126,
+      "height": 150,
+      "image": "carrot"
+    },
+    "carrot3": {
+      "x": 522,
+      "y": 70,
+      "width": 84,
+      "height": 100,
+      "image": "carrot"
+    },
+    "youwin": {
+      "x": 255,
+      "y": 250,
+      "width": 129,
+      "height": 23,
+      "image": "youwin",
+      "script": "on enter play horray;"
+    }
+  }
+}
+  </script>
+  <style type="text/css" media="screen">
+body {
+  background-color: white;
+  color: black;
+}
+.hidden {
+  display: none;
+}
+#original {
+  margin-left: 1em;
+}
+  </style>
+</head>
+
+<body>
+<section id="imageLoader" class="hidden">
+  <img class="hidden" src="images/bunny.jpeg" alt="bunny" data-name="bunny">
+  <img class="hidden" src="images/carrot2.gif" alt="carrot2" data-name="carrot2">
+  <img class="hidden" src="images/carrot.gif" alt="carrot" data-name="carrot">
+  <img class="hidden" src="images/death.gif" alt="death" data-name="death">
+  <img class="hidden" src="images/duck.gif" alt="duck" data-name="duck">
+  <img class="hidden" src="images/fire.gif" alt="fire" data-name="fire">
+  <img class="hidden" src="images/mystic.gif" alt="mystic" data-name="mystic">
+  <img class="hidden" src="images/rubmytummy.gif" alt="rubmytummy" data-name="rubmytummy">
+  <img class="hidden" src="images/youwin.gif" alt="youwin" data-name="youwin">
+</section>
+<section id="soundLoader" class="hidden">
+  <audio class="hidden" controls preload="auto" src="sounds/carrotcarrotcarrot.wav" data-name="carrotcarrotcarrot">Your browser does not support the audio element.</audio>
+  <audio class="hidden" controls preload="auto" src="sounds/evillaugh.wav" data-name="evillaugh">Your browser does not support the audio element.</audio>
+  <audio class="hidden" controls preload="auto" src="sounds/fire.wav" data-name="fire">Your browser does not support the audio element.</audio>
+  <audio class="hidden" controls preload="auto" src="sounds/horray.wav" data-name="horray">Your browser does not support the audio element.</audio>
+  <audio class="hidden" controls preload="auto" src="sounds/munch.wav" data-name="munch">Your browser does not support the audio element.</audio>
+  <audio class="hidden" controls preload="auto" src="sounds/munching.wav" data-name="munching">Your browser does not support the audio element.</audio>
+  <audio class="hidden" controls preload="auto" src="sounds/woof.wav" data-name="woof">Your browser does not support the audio element.</audio>
+</section>
+
+<main>
+<h1>Bunny World</h1>
+
+<canvas id="screen">
+The game screen appears here if your browser supports the Canvas API.
+</canvas>
+<section id="controls">
+  <button type="button" id="reset">Reset</button>
+  <button type="button" id="pause">Pause</button>
+</section>
+
+<p>A bit of nostalgia for CS108 alumni.</p>
+
+</main>
+
+<script>
+WIDTH = 640;
+HEIGHT = 480;
+
+window.addEventListener('load', (event) => {
+  images.LOAD('#imageLoader img');
+  sounds.LOAD('#soundLoader audio');
+  reset();
+  screen.set_mode('#screen', '#reset', '#pause');
+});
+</script>
+</body>
+
+</html>
