@@ -374,7 +374,7 @@ function test_loadWorld() {
   test.assertTrue(loadWorld({}).has(INVENTORY));
   test.assertTrue(loadWorld({inventory: {}}).has(INVENTORY));
 
-  let world = loadWorld({foobar: {}})
+  let world = loadWorld({foobar: {}});
   test.assertEqual(world.size, 2);
   test.assertTrue(world.has(INVENTORY));
   test.assertEqual(world.get(INVENTORY), []);
