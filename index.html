@@ -253,10 +253,7 @@ WIDTH = 640;
 HEIGHT = 480;
 
 window.addEventListener('load', (event) => {
-  images.LOAD('#imageLoader img');
-  sounds.LOAD('#soundLoader audio');
-  reset();
-  screen.set_mode('#screen', '#reset', '#pause');
+  screen.init();
 });
 </script>
 </body>

@@ -87,20 +87,9 @@ body {
 <main>
 <h1>Test pages</h1>
 
-<canvas id="screen">
-The game screen appears here if your browser supports the Canvas API.
-</canvas>
-<section id="controls">
-  <button type="button" id="reset">Reset</button>
-  <button type="button" id="pause">Pause</button>
-</section>
-
 </main>
 
 <script>
-WIDTH = 640;
-HEIGHT = 480;
-
 function test_loadWorld() {
   test.assertEqual(world.size, 4);
   test.assertTrue(world.has(INVENTORY));
@@ -168,7 +157,6 @@ function test_goto() {
 
 window.addEventListener('load', (event) => {
   reset();
-  screen.set_mode('#screen', '#reset', '#pause');
   test.main();
 });
 </script>

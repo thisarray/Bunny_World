@@ -443,10 +443,8 @@ function test_loadWorld() {
 }
 
 window.addEventListener('load', (event) => {
+  screen.init();
   test.main();
-  sounds.LOAD('#soundLoader audio');
-  reset();
-  screen.set_mode('#screen', '#reset', '#pause');
 });
 </script>
 </body>
